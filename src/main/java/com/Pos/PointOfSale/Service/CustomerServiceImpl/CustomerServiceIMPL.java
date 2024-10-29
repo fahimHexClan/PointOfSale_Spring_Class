@@ -66,6 +66,7 @@ public class CustomerServiceIMPL implements CustomerService {
     @Override
     public CustomerDTO getCustomerBy(int id) {
 
+        //genarics use karala data okkoma ganna ona hindha
         Optional<CustomerEntity> customerEntity = customerRepo.findById(id);
         if(customerEntity.isPresent()){
             //meke object ekak newei constracter call karana ekak
