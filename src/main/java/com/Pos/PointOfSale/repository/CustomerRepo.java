@@ -9,7 +9,10 @@ import java.util.List;
 
 @EnableJpaRepositories
 @Repository
+//methana ape entityai id ekae value ekai aniwaren danna ona
 public interface CustomerRepo extends JpaRepository<CustomerEntity,Integer> {
+
+    //meken equal wenuwata is eken karannth  puluwan
     List<CustomerEntity> findAllByCustomerNameEquals(String customerName);
 
 //(Dao part)entity eka database

@@ -35,7 +35,7 @@ public class CustomerClass {
     //backend   eke idala ui ekata data yawankota api use karanne dto anika
     // (getbyuser id ekata api dto eken idala data ganne hethuwa a id eken a dala data withark ganna nisa )
     public CustomerDTO getCustomerById(@RequestParam(value = "id") int id) {
-        CustomerDTO customerDTO = customerService.getCustomerBy(id);
+        CustomerDTO customerDTO = customerService.getCustomerById(id);
         return customerDTO;
     }
 

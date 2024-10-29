@@ -6,6 +6,7 @@ import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
 import com.Pos.PointOfSale.repository.CustomerRepo;
+import com.Pos.PointOfSale.util.mappers.CustomerMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class CustomerServiceIMPL implements CustomerService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
 
 
     @Override
@@ -65,7 +69,7 @@ public class CustomerServiceIMPL implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomerBy(int id) {
+    public CustomerDTO getCustomerById(int id) {
 
         //genarics use karala data okkoma ganna ona hindha
         Optional<CustomerEntity> customerEntity = customerRepo.findById(id);
@@ -85,8 +89,12 @@ public class CustomerServiceIMPL implements CustomerService {
              );
             return customerDTO;*/
 
-            //optional dmmnam get eka aniwren danna ona neththm ganna ba data //meke model maper use karala hadagaththma easy
-            CustomerDTO customerDTO = modelMapper.map(customerEntity.get(), CustomerDTO.class);
+           /* //optional dmmnam get eka aniwren danna ona neththm ganna ba data //meke model maper use karala hadagaththma easy
+            CustomerDTO customerDTO = modelMapper.map(customerEntity.get(), CustomerDTO.class);*/
+
+            //mapstruck
+            CustomerDTO customerDTO = customerMapper.entityToDto(customerEntity.get());
+
             return customerDTO;
         } else {
             return null;

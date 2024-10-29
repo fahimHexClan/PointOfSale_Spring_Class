@@ -12,7 +12,7 @@ public interface CustomerService {
 
     String updateCustomer(CustomerUpdateRequestDto customerUpdateRequestDto);
 
-    CustomerDTO getCustomerBy(int id);
+    CustomerDTO getCustomerById(int id);
 
     List<CustomerDTO> getAllCustomers();
 
