@@ -9,6 +9,7 @@ import com.Pos.PointOfSale.repository.CustomerRepo;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,13 +30,7 @@ public class CustomerServiceIMPL implements CustomerService {
     public String addCustomer(CustomerSaveRequestDto customerDTO) {
         CustomerEntity customerEntity = new CustomerEntity(
 
-                customerDTO.getCustomerName(),
-                customerDTO.getCustomerAddress(),
-                customerDTO.getCustomerSalary(),
-                customerDTO.getContactNumbers(),
-                customerDTO.getNic(),
-                true
-        );
+                customerDTO.getCustomerName(), customerDTO.getCustomerAddress(), customerDTO.getCustomerSalary(), customerDTO.getContactNumbers(), customerDTO.getNic(), true);
         customerRepo.save(customerEntity);
         return customerEntity.getCustomerName() + " saved with ID: " + customerEntity.getCustomerId();
 
@@ -119,11 +114,39 @@ public class CustomerServiceIMPL implements CustomerService {
 
 
         }*/
-        List<CustomerDTO> customerDTOS = modelMapper.
-                map(getCustomers,new TypeToken<List<CustomerDTO>>(){}.getType());
+        List<CustomerDTO> customerDTOS = modelMapper.map(getCustomers, new TypeToken<List<CustomerDTO>>() {
+        }.getType());
 
 
         return customerDTOS;
+    }
+
+    @Override
+    public boolean deleteCustomer(int id) throws ChangeSetPersister.NotFoundException {
+        if (customerRepo.existsById(id)) {
+            customerRepo.deleteById(id);
+        } else {
+            throw new ChangeSetPersister.NotFoundException();
+        }
+        return true;
+    }
+
+    @Override
+    public List<CustomerDTO> getByName(String customerName) throws ChangeSetPersister.NotFoundException {
+        //meken boru namk gahala eka customer repo ekata yawala ethen apita
+        // onade suggest karala (mata ona name eken idintify karanna )
+        //erthakota repo eken find kiyala danakota customer name sugst wenawa  ethana eka hadala metha evila ctrl ekai space ekai ebuwama sugst wenawae
+        List<CustomerEntity> customerEntities= customerRepo.findAllByCustomerNameEquals(customerName);
+        //meken niyanne entity size 0 nttm athulata yanna nththm else ekata yanna
+        if(customerEntities.size()!=0){
+            List<CustomerDTO> customerDTOS = modelMapper.
+                    map(customerEntities, new TypeToken<List<CustomerDTO>>() {
+            }.getType());
+            return customerDTOS;
+        }else {
+            throw new ChangeSetPersister.NotFoundException();
+        }
+
     }
 
 }
