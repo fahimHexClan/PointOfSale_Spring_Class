@@ -7,6 +7,7 @@ import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
 import com.Pos.PointOfSale.repository.CustomerRepo;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,12 +77,6 @@ public class CustomerServiceIMPL implements CustomerService {
         if (customerEntity.isPresent()) {
 
 
-
-
-
-
-
-
             /*//meke object ekak newei constracter call karana ekak
             CustomerDTO customerDTO = new CustomerDTO(
             //optional use karanakota data ganna get use kranawa
@@ -109,7 +104,7 @@ public class CustomerServiceIMPL implements CustomerService {
     public List<CustomerDTO> getAllCustomers() {
         List<CustomerEntity> getCustomers = customerRepo.findAll();
         List<CustomerDTO> customerDTOList = new ArrayList<>();
-        for (CustomerEntity c : getCustomers) {
+        /*for (CustomerEntity c : getCustomers) {
             CustomerDTO customerDto = new CustomerDTO(
                     c.getCustomerId(),
                     c.getCustomerName(),
@@ -123,8 +118,12 @@ public class CustomerServiceIMPL implements CustomerService {
             customerDTOList.add(customerDto);
 
 
-        }
-        return customerDTOList;
+        }*/
+        List<CustomerDTO> customerDTOS = modelMapper.
+                map(getCustomers,new TypeToken<List<CustomerDTO>>(){}.getType());
+
+
+        return customerDTOS;
     }
 
 }
