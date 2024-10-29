@@ -75,6 +75,14 @@
 			<version>1.18.34</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+		<!--me dependancy danne code line adu katrala properties wedi unama eka easy handle karanna-->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springdoc</groupId>

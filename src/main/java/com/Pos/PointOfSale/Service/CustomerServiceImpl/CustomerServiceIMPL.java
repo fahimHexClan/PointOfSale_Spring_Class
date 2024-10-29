@@ -6,6 +6,7 @@ import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
 import com.Pos.PointOfSale.repository.CustomerRepo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class CustomerServiceIMPL implements CustomerService {
 
     @Autowired
     private CustomerRepo customerRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @Override
@@ -69,7 +73,15 @@ public class CustomerServiceIMPL implements CustomerService {
         //genarics use karala data okkoma ganna ona hindha
         Optional<CustomerEntity> customerEntity = customerRepo.findById(id);
         if(customerEntity.isPresent()){
-            //meke object ekak newei constracter call karana ekak
+
+
+
+
+
+
+
+
+            /*//meke object ekak newei constracter call karana ekak
             CustomerDTO customerDTO = new CustomerDTO(
             //optional use karanakota data ganna get use kranawa
              customerEntity.get().getCustomerId(),
@@ -80,6 +92,10 @@ public class CustomerServiceIMPL implements CustomerService {
              customerEntity.get().getNic(),
                      customerEntity.get().isActiveState()
              );
+            return customerDTO;*/
+
+            //optional dmmnam get eka aniwren danna ona neththm ganna ba data //meke model maper use karala hadagaththma easy
+            CustomerDTO customerDTO = modelMapper.map(customerEntity.get(), CustomerDTO.class);
             return customerDTO;
         }else {
             return null;
