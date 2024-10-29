@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,7 +34,7 @@ public class CustomerServiceIMPL implements CustomerService {
                 customerDTO.getContactNumbers(),
                 customerDTO.getNic(),
                 true
-         );
+        );
         customerRepo.save(customerEntity);
         return customerEntity.getCustomerName() + " saved with ID: " + customerEntity.getCustomerId();
 
@@ -44,24 +46,23 @@ public class CustomerServiceIMPL implements CustomerService {
 
 /*//udathiyana customer repo kiyana object eka haraha  (exisitsBYId) eka clss ethule thiyana method ekak call karanawa  ekn (thiyana id hoyanna pluwn)
         ui eken aapu dto eken  getcustomer id set nam eya phalata yanawa*/
-        if (customerRepo.existsById(customerUpdateRequestDto.getCustomerId())){
+        if (customerRepo.existsById(customerUpdateRequestDto.getCustomerId())) {
 
             //customer entity eka haraha customer repo eke thiyana getby id method eke  ara fontend eke idala aapu id eka aragannawa
             CustomerEntity customerEntity = customerRepo.getById(customerUpdateRequestDto.getCustomerId());
 
             /*customer entity eken  (set)method eka ganne update karana hindha
             ita passe frontend eken idan yawanne Request dto ekn ekn aapu data eka mekata set wenawa  */
-           customerEntity.setCustomerName(customerUpdateRequestDto.getCustomerName());
-           customerEntity.setCustomerAddress(customerUpdateRequestDto.getCustomerAddress());
-           customerEntity.setCustomerSalary(customerUpdateRequestDto.getCustomerSalary());
-           customerEntity.setContactNumbers(customerUpdateRequestDto.getContactNumbers());
-           customerEntity.setNic(customerUpdateRequestDto.getNic());
-           //boolean wala getmethod eka widihata use karnne is eka
-           customerEntity.setActiveState(customerUpdateRequestDto.isActiveState());
-           //update ekak unata  mekth save method eken thama yawanne aluthen add wena widihata
-           return customerRepo.save(customerEntity).getCustomerName() + "updated";
-        }
-        else{
+            customerEntity.setCustomerName(customerUpdateRequestDto.getCustomerName());
+            customerEntity.setCustomerAddress(customerUpdateRequestDto.getCustomerAddress());
+            customerEntity.setCustomerSalary(customerUpdateRequestDto.getCustomerSalary());
+            customerEntity.setContactNumbers(customerUpdateRequestDto.getContactNumbers());
+            customerEntity.setNic(customerUpdateRequestDto.getNic());
+            //boolean wala getmethod eka widihata use karnne is eka
+            customerEntity.setActiveState(customerUpdateRequestDto.isActiveState());
+            //update ekak unata  mekth save method eken thama yawanne aluthen add wena widihata
+            return customerRepo.save(customerEntity).getCustomerName() + "updated";
+        } else {
             System.out.println("Customer id does not exist");
             return "Customer id does not in Database";
         }
@@ -72,7 +73,7 @@ public class CustomerServiceIMPL implements CustomerService {
 
         //genarics use karala data okkoma ganna ona hindha
         Optional<CustomerEntity> customerEntity = customerRepo.findById(id);
-        if(customerEntity.isPresent()){
+        if (customerEntity.isPresent()) {
 
 
 
@@ -97,11 +98,33 @@ public class CustomerServiceIMPL implements CustomerService {
             //optional dmmnam get eka aniwren danna ona neththm ganna ba data //meke model maper use karala hadagaththma easy
             CustomerDTO customerDTO = modelMapper.map(customerEntity.get(), CustomerDTO.class);
             return customerDTO;
-        }else {
+        } else {
             return null;
         }
 
 
+    }
+
+    @Override
+    public List<CustomerDTO> getAllCustomers() {
+        List<CustomerEntity> getCustomers = customerRepo.findAll();
+        List<CustomerDTO> customerDTOList = new ArrayList<>();
+        for (CustomerEntity c : getCustomers) {
+            CustomerDTO customerDto = new CustomerDTO(
+                    c.getCustomerId(),
+                    c.getCustomerName(),
+                    c.getCustomerAddress(),
+                    c.getCustomerSalary(),
+                    c.getContactNumbers(),
+                    c.getNic(),
+                    c.isActiveState()
+
+            );
+            customerDTOList.add(customerDto);
+
+
+        }
+        return customerDTOList;
     }
 
 }
