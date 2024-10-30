@@ -15,6 +15,9 @@ public interface CustomerRepo extends JpaRepository<CustomerEntity,Integer> {
     //meken equal wenuwata is eken karannth  puluwan
     List<CustomerEntity> findAllByCustomerNameEquals(String customerName);
 
+    List<CustomerEntity> findAllByActiveStateEquals (boolean b);
+
+
 //(Dao part)entity eka database
 
 }

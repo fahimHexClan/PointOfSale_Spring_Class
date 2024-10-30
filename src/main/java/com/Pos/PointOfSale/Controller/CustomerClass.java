@@ -4,6 +4,7 @@ import com.Pos.PointOfSale.Service.CustomerService;
 import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
+import com.Pos.PointOfSale.dto.response.ResponseActiveCustomerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.*;
@@ -64,5 +65,23 @@ public class CustomerClass {
     public List<CustomerDTO> getCustomerByName(@RequestParam (value = "name")String customerName) throws ChangeSetPersister.NotFoundException {
     List<CustomerDTO> getCustomer= customerService.getByName(customerName);
     return getCustomer;
+    }
+
+    @GetMapping(
+            path = {"/get-by-active-state"}
+    )
+    public List<CustomerDTO> getCustomerByActiveState() throws ChangeSetPersister.NotFoundException {
+    List<CustomerDTO> getCustomers =customerService.getAllCustomersByActiveState();
+
+        return getCustomers;
+    }
+
+    @GetMapping(
+            path = {"/get-by-active-state-only-name"}
+    )
+    public List<ResponseActiveCustomerDto> getCustomerByActiveStateOnlyName() throws ChangeSetPersister.NotFoundException {
+        List<ResponseActiveCustomerDto> getCustomersName =customerService.getAllCustomersByActiveStateOnlyName();
+
+        return getCustomersName;
     }
 }

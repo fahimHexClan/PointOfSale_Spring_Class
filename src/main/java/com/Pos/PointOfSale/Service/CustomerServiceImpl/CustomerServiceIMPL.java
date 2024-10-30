@@ -5,6 +5,7 @@ import com.Pos.PointOfSale.Service.CustomerService;
 import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
+import com.Pos.PointOfSale.dto.response.ResponseActiveCustomerDto;
 import com.Pos.PointOfSale.repository.CustomerRepo;
 import com.Pos.PointOfSale.util.mappers.CustomerMapper;
 import org.modelmapper.ModelMapper;
@@ -157,4 +158,34 @@ public class CustomerServiceIMPL implements CustomerService {
 
     }
 
-}
+    @Override
+    public List<CustomerDTO> getAllCustomersByActiveState() throws ChangeSetPersister.NotFoundException {
+        //active customersla ganna thama true use karnne inactive nam false
+      List<CustomerEntity> customerEntities = customerRepo.findAllByActiveStateEquals(true);
+      if(customerEntities.size()!=0){
+          //ud thiyana customerEntities thama perameter widihata yawanne
+          List<CustomerDTO> customerDTOS = customerMapper.entityListToDto(customerEntities);
+          return customerDTOS;
+      }else {
+          throw new ChangeSetPersister.NotFoundException();
+      }
+
+
+    }
+
+    @Override
+    public List<ResponseActiveCustomerDto> getAllCustomersByActiveStateOnlyName() throws ChangeSetPersister.NotFoundException {
+        //active customersla ganna thama true use karnne inactive nam false
+        //uda use karapu findAll ma mekata use karanna puluwan
+        List<CustomerEntity> customerEntities = customerRepo.findAllByActiveStateEquals(true);
+        if (customerEntities.size() != 0) {
+            //ud thiyana customerEntities thama perameter widihata yawanne
+            List<ResponseActiveCustomerDto> responseActiveCustomerDtos = customerMapper.entityListToResponseDto(customerEntities);
+            return responseActiveCustomerDtos;
+        } else {
+            throw new ChangeSetPersister.NotFoundException();
+        }
+
+    }
+
+    }
