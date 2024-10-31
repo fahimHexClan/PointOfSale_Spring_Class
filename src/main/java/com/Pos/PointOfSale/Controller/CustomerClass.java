@@ -3,6 +3,7 @@ package com.Pos.PointOfSale.Controller;
 import com.Pos.PointOfSale.Service.CustomerService;
 import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
+import com.Pos.PointOfSale.dto.request.CustomerUpdateQueryRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
 import com.Pos.PointOfSale.dto.response.ResponseActiveCustomerDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class CustomerClass {
         return id;
     }
 
-    @PutMapping
+    @PutMapping (path = "/update")
     public String updateCustomer(@RequestBody CustomerUpdateRequestDto customerUpdateRequestDto) {
         String updated = customerService.updateCustomer(customerUpdateRequestDto);
         return updated;
@@ -83,5 +84,22 @@ public class CustomerClass {
         List<ResponseActiveCustomerDto> getCustomersName =customerService.getAllCustomersByActiveStateOnlyName();
 
         return getCustomersName;
+    }
+    @PutMapping (path = "/update-Query/{id}")
+    //me dto eken id remo karpu hindha parameter ekata id eka danawa
+    public String updateCustomerByQuery(@RequestBody CustomerUpdateQueryRequestDto customerUpdateQueryRequestDto,
+                                        @PathVariable(value = "id") int id) {
+        String updated = customerService.updateCustomerByQuery(customerUpdateQueryRequestDto,id);
+        return updated;
+    }
+
+    @GetMapping(
+            path = {"/get-customer-by-nic"},
+            params = {"nic"}
+    )
+//params eken String id ekth name chnge wenawanam witharai (value="")eka ona wenne hebai eka dalama hadana eka thma standart
+    public CustomerDTO getCustomerByNic(@RequestParam(value = "nic") String nic) {
+        CustomerDTO customerDTO = customerService.getCustomerByNic(nic);
+        return customerDTO;
     }
 }

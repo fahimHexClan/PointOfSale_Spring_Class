@@ -4,6 +4,7 @@ import com.Pos.PointOfSale.Entity.CustomerEntity;
 import com.Pos.PointOfSale.Service.CustomerService;
 import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
+import com.Pos.PointOfSale.dto.request.CustomerUpdateQueryRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
 import com.Pos.PointOfSale.dto.response.ResponseActiveCustomerDto;
 import com.Pos.PointOfSale.repository.CustomerRepo;
@@ -145,14 +146,13 @@ public class CustomerServiceIMPL implements CustomerService {
         //meken boru namk gahala eka customer repo ekata yawala ethen apita
         // onade suggest karala (mata ona name eken idintify karanna )
         //erthakota repo eken find kiyala danakota customer name sugst wenawa  ethana eka hadala metha evila ctrl ekai space ekai ebuwama sugst wenawae
-        List<CustomerEntity> customerEntities= customerRepo.findAllByCustomerNameEquals(customerName);
+        List<CustomerEntity> customerEntities = customerRepo.findAllByCustomerNameEquals(customerName);
         //meken niyanne entity size 0 nttm athulata yanna nththm else ekata yanna
-        if(customerEntities.size()!=0){
-            List<CustomerDTO> customerDTOS = modelMapper.
-                    map(customerEntities, new TypeToken<List<CustomerDTO>>() {
+        if (customerEntities.size() != 0) {
+            List<CustomerDTO> customerDTOS = modelMapper.map(customerEntities, new TypeToken<List<CustomerDTO>>() {
             }.getType());
             return customerDTOS;
-        }else {
+        } else {
             throw new ChangeSetPersister.NotFoundException();
         }
 
@@ -161,14 +161,14 @@ public class CustomerServiceIMPL implements CustomerService {
     @Override
     public List<CustomerDTO> getAllCustomersByActiveState() throws ChangeSetPersister.NotFoundException {
         //active customersla ganna thama true use karnne inactive nam false
-      List<CustomerEntity> customerEntities = customerRepo.findAllByActiveStateEquals(true);
-      if(customerEntities.size()!=0){
-          //ud thiyana customerEntities thama perameter widihata yawanne
-          List<CustomerDTO> customerDTOS = customerMapper.entityListToDto(customerEntities);
-          return customerDTOS;
-      }else {
-          throw new ChangeSetPersister.NotFoundException();
-      }
+        List<CustomerEntity> customerEntities = customerRepo.findAllByActiveStateEquals(true);
+        if (customerEntities.size() != 0) {
+            //ud thiyana customerEntities thama perameter widihata yawanne
+            List<CustomerDTO> customerDTOS = customerMapper.entityListToDto(customerEntities);
+            return customerDTOS;
+        } else {
+            throw new ChangeSetPersister.NotFoundException();
+        }
 
 
     }
@@ -188,4 +188,32 @@ public class CustomerServiceIMPL implements CustomerService {
 
     }
 
+    @Override
+    public String updateCustomerByQuery(CustomerUpdateQueryRequestDto customerUpdateQueryRequestDto, int id) {
+        if (customerRepo.existsById(id)) {
+            customerRepo.UpadateCustomerByQuery(customerUpdateQueryRequestDto.getCustomerName(), customerUpdateQueryRequestDto.getNic(), id);
+            return "updated Succesfully" + id;
+        } else {
+            System.out.println("Customer id does not exist" + id);
+            return "Customer id does not exist" + id;
+        }
+
     }
+
+    @Override
+    public CustomerDTO getCustomerByNic(String nic) {
+
+        //samanen data godak gannawanam list ekai ,ekknk gannawam optional use karanaa anika check karanna easy
+        Optional<CustomerEntity> customerEntity = customerRepo.findByNicEquals(nic);
+        if (customerEntity.isPresent()) {
+            //data evilla thiyanne entitiy eken na eka 1st dnwa//optional eke data gannm get danna ona
+            // mokatada map karanne kiyna eka metha danna ona// right side danakota clss kiyla danna ona map karanne class ekata hinda
+            CustomerDTO customerDTO = modelMapper.map(customerEntity.get(), CustomerDTO.class);
+            return customerDTO;
+        }else {
+            return null;
+        }
+
+    }
+
+}
