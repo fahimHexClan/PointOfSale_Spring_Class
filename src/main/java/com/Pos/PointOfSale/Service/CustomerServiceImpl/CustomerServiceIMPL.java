@@ -270,7 +270,8 @@ public class CustomerServiceIMPL implements CustomerService {
                 CustomerDTO customerDTO = modelMapper.map(customerEntity.get(), CustomerDTO.class);
                 return customerDTO;
             }else {
-                System.out.println("Customer id does not exist  :-" + id);            }
+                System.out.println("Customer id does not exist  :-" + id);
+            }
         } else {
             throw new NotFoundException("Not Found");
         }return new CustomerDTO(
