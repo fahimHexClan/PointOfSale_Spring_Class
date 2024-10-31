@@ -2,11 +2,14 @@ package com.Pos.PointOfSale.Service;
 
 import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
+import com.Pos.PointOfSale.dto.request.CustomerUpdateByDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateQueryRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
 import com.Pos.PointOfSale.dto.response.ResponseActiveCustomerDto;
+import com.Pos.PointOfSale.dto.response.ResponseCustomerFilterDto;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface CustomerService {
@@ -29,4 +32,10 @@ public interface CustomerService {
     String updateCustomerByQuery(CustomerUpdateQueryRequestDto customerUpdateQueryRequestDto, int id);
 
     CustomerDTO getCustomerByNic(String nic);
+
+    ResponseCustomerFilterDto getCustomerByIdFilter(int id);
+
+    String updateCustomerByRequest(CustomerUpdateByDto customerUpdateRequestDto, int id);
+
+    CustomerDTO getCustomerByIdIsActive(int id);
 }

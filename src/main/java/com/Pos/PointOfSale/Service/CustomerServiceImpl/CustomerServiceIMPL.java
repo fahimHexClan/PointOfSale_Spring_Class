@@ -4,9 +4,13 @@ import com.Pos.PointOfSale.Entity.CustomerEntity;
 import com.Pos.PointOfSale.Service.CustomerService;
 import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
+import com.Pos.PointOfSale.dto.request.CustomerUpdateByDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateQueryRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
 import com.Pos.PointOfSale.dto.response.ResponseActiveCustomerDto;
+import com.Pos.PointOfSale.dto.response.ResponseCustomerFilterDto;
+import com.Pos.PointOfSale.exception.EntryDuplicateException;
+import com.Pos.PointOfSale.exception.NotFoundException;
 import com.Pos.PointOfSale.repository.CustomerRepo;
 import com.Pos.PointOfSale.util.mappers.CustomerMapper;
 import org.modelmapper.ModelMapper;
@@ -65,8 +69,10 @@ public class CustomerServiceIMPL implements CustomerService {
             //update ekak unata  mekth save method eken thama yawanne aluthen add wena widihata
             return customerRepo.save(customerEntity).getCustomerName() + "updated";
         } else {
-            System.out.println("Customer id does not exist");
-            return "Customer id does not in Database";
+            /*System.out.println("Customer id does not exist");
+            return "Customer id does not in Database";*/
+
+            throw new EntryDuplicateException("Not found database");
         }
     }
 
@@ -211,9 +217,65 @@ public class CustomerServiceIMPL implements CustomerService {
             CustomerDTO customerDTO = modelMapper.map(customerEntity.get(), CustomerDTO.class);
             return customerDTO;
         }else {
-            return null;
+            throw new NotFoundException("Not Found");
         }
 
     }
 
+    @Override
+    public ResponseCustomerFilterDto getCustomerByIdFilter(int id) {
+        //genarics use karala data okkoma ganna ona hindha
+        Optional<CustomerEntity> customerEntity = customerRepo.findById(id);
+        if (customerEntity.isPresent()) {
+
+            //mapstruck
+            ResponseCustomerFilterDto responseCustomerFilterDto = customerMapper.entityToResponseDto(customerEntity.get());
+
+            return responseCustomerFilterDto;
+        } else {
+             throw new NotFoundException("Not Found");
+        }
+
+
+    }
+
+    @Override
+    public String updateCustomerByRequest(CustomerUpdateByDto customerUpdateByDto, int id) {
+        if (customerRepo.existsById(id)) {
+
+            //customer entity eka haraha customer repo eke thiyana getby id method eke  ara fontend eke idala aapu id eka aragannawa
+            CustomerEntity customerEntity = customerRepo.getById(id);
+
+            /*customer entity eken  (set)method eka ganne update karana hindha
+            ita passe frontend eken idan yawanne Request dto ekn ekn aapu data eka mekata set wenawa  */
+            customerEntity.setCustomerName(customerUpdateByDto.getCustomerName());
+            customerEntity.setCustomerSalary(customerUpdateByDto.getCustomerSalary());
+            customerEntity.setNic(customerUpdateByDto.getNic());
+
+            //update ekak unata  mekth save method eken thama yawanne aluthen add wena widihata
+            return customerRepo.save(customerEntity).getCustomerName() + "updated Succesfully" + id;
+        } else {
+            /*System.out.println("Customer id does not exist");
+            return "Customer id does not in Database";*/
+
+            throw new EntryDuplicateException("Not found database");
+        }
+    }
+
+    @Override
+    public CustomerDTO getCustomerByIdIsActive(int id) {
+        Optional<CustomerEntity> customerEntity = customerRepo.findById(id);
+        if (customerEntity.isPresent()) {
+            if (customerEntity.get().isActiveState()==true) {
+                CustomerDTO customerDTO = modelMapper.map(customerEntity.get(), CustomerDTO.class);
+                return customerDTO;
+            }else {
+                System.out.println("Customer id does not exist  :-" + id);            }
+        } else {
+            throw new NotFoundException("Not Found");
+        }return new CustomerDTO(
+                customerEntity.get().getCustomerName()+"is Not Active"+id
+        );
+
+    }
 }

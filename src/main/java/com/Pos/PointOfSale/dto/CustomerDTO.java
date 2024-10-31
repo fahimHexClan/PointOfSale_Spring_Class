@@ -11,6 +11,11 @@ public class CustomerDTO {
     private String nic;
     private boolean activeState;
 
+
+    public CustomerDTO(String customerName) {
+        this.customerName = customerName;
+    }
+
     public CustomerDTO(int customerId, String customerName, String customerAddress, double customerSalary, ArrayList<String> contactNumbers, String nic, boolean activeState) {
         this.customerId = customerId;
         this.customerName = customerName;

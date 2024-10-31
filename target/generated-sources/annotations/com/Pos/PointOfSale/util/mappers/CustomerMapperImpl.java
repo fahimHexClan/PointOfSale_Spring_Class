@@ -3,6 +3,7 @@ package com.Pos.PointOfSale.util.mappers;
 import com.Pos.PointOfSale.Entity.CustomerEntity;
 import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.response.ResponseActiveCustomerDto;
+import com.Pos.PointOfSale.dto.response.ResponseCustomerFilterDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-10-30T13:55:01+0530",
+    date = "2024-10-31T15:55:36+0530",
     comments = "version: 1.4.1.Final, compiler: javac, environment: Java 21.0.3 (Oracle Corporation)"
 )
 @Component
@@ -64,6 +65,21 @@ public class CustomerMapperImpl implements CustomerMapper {
         }
 
         return list;
+    }
+
+    @Override
+    public ResponseCustomerFilterDto entityToResponseDto(CustomerEntity customerEntity) {
+        if ( customerEntity == null ) {
+            return null;
+        }
+
+        ResponseCustomerFilterDto responseCustomerFilterDto = new ResponseCustomerFilterDto();
+
+        responseCustomerFilterDto.setCustomerId( customerEntity.getCustomerId() );
+        responseCustomerFilterDto.setCustomerAddress( customerEntity.getCustomerAddress() );
+        responseCustomerFilterDto.setCustomerSalary( customerEntity.getCustomerSalary() );
+
+        return responseCustomerFilterDto;
     }
 
     protected ResponseActiveCustomerDto customerEntityToResponseActiveCustomerDto(CustomerEntity customerEntity) {

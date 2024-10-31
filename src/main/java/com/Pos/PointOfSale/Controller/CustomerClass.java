@@ -3,9 +3,11 @@ package com.Pos.PointOfSale.Controller;
 import com.Pos.PointOfSale.Service.CustomerService;
 import com.Pos.PointOfSale.dto.CustomerDTO;
 import com.Pos.PointOfSale.dto.request.CustomerSaveRequestDto;
+import com.Pos.PointOfSale.dto.request.CustomerUpdateByDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateQueryRequestDto;
 import com.Pos.PointOfSale.dto.request.CustomerUpdateRequestDto;
 import com.Pos.PointOfSale.dto.response.ResponseActiveCustomerDto;
+import com.Pos.PointOfSale.dto.response.ResponseCustomerFilterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.*;
@@ -102,4 +104,29 @@ public class CustomerClass {
         CustomerDTO customerDTO = customerService.getCustomerByNic(nic);
         return customerDTO;
     }
+    @GetMapping(
+            path = {"/get-customer-by-id-filter"},
+            params = {"id"}
+    )
+//params eken String id ekth name chnge wenawanam witharai (value="")eka ona wenne hebai eka dalama hadana eka thma standart
+    public ResponseCustomerFilterDto getCustomerByIdFilter(@RequestParam(value = "id") int id) {
+        ResponseCustomerFilterDto responseCustomerFilterDto = customerService.getCustomerByIdFilter(id);
+        return responseCustomerFilterDto;
+    }
+
+    @PutMapping (path = "/update-By-request/{id}")
+    public String updateCustomerByRequest(@RequestBody CustomerUpdateByDto customerUpdateRequestDto,
+                                          @PathVariable(value ="id")int id) {
+        String updated = customerService.updateCustomerByRequest(customerUpdateRequestDto,id);
+        return updated;
+    }
+    @GetMapping(
+            path = {"/get-by-id-is-active"},
+            params = {"id"}
+    )
+    public CustomerDTO getCustomerByIdIsActive(@RequestParam(value = "id") int id) {
+        CustomerDTO customerDTO = customerService.getCustomerByIdIsActive(id);
+        return customerDTO;
+    }
+
 }
