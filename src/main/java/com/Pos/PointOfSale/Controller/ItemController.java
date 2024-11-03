@@ -1,8 +1,10 @@
 package com.Pos.PointOfSale.Controller;
 
 import com.Pos.PointOfSale.dto.ItemDto;
+import com.Pos.PointOfSale.dto.Paginated.PaginatedResponseItemDto;
 import com.Pos.PointOfSale.dto.request.ItemSaveRequestDto;
 import com.Pos.PointOfSale.util.StandardResponse;
+import jakarta.validation.constraints.Max;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +61,43 @@ public class ItemController {
             );
 
         }
+
+    }
+
+
+    @GetMapping(path = "count-all-items")
+    //active customerslage count eka ganna
+    public ResponseEntity<StandardResponse> getAllItemCounts() {
+        int itemCount = itemService.countAllItems();
+
+        return new ResponseEntity<StandardResponse>(new StandardResponse(200, " Succesfully get  ", itemCount), HttpStatus.OK//data ekak aluthen get karama ok kiyala return karanawa
+
+        );
+    }
+
+
+    @GetMapping(path = "get-all-items-paginated", params = {"page","size"})
+    public ResponseEntity<StandardResponse> getAllItemPaginated(@RequestParam(value = "page") int page, @RequestParam(value = "size") @Max(50) int size //uparima ekawarakta backend eken data ganiyanna puluwan 50i
+    ) {
+        PaginatedResponseItemDto paginatedResponseItemDto = itemService.getAllItemsPaginated(page,size);
+        return new ResponseEntity<StandardResponse>(new StandardResponse
+                (200, " Succesfully get  ", paginatedResponseItemDto),
+                HttpStatus.OK//data ekak aluthen get karama ok kiyala return karanawa
+
+        );
+
+    }
+    @GetMapping(path = "get-all-active-items-paginated", params = {"page","size","activeState"})
+    public ResponseEntity<StandardResponse> getAllItemPaginated(@RequestParam(value = "page") int page,
+                                                                @RequestParam(value = "size") @Max(50) int size,
+                                                                @RequestParam(value = "activeState") boolean activeState
+    ) {
+        PaginatedResponseItemDto paginatedResponseItemDto = itemService.getAllActiveItemsPaginated(page,size,activeState);
+        return new ResponseEntity<StandardResponse>(new StandardResponse
+                (200, " Succesfully get  ", paginatedResponseItemDto),
+                HttpStatus.OK//data ekak aluthen get karama ok kiyala return karanawa
+
+        );
 
     }
 

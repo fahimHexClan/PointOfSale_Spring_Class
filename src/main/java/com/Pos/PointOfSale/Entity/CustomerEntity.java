@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -35,6 +36,9 @@ public class CustomerEntity implements Serializable {
 
     @Column(name = "active_state", columnDefinition = "TINYINT default 1")
     private boolean activeState;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<OrderEntity> orders;
 
     // Default constructor
     public CustomerEntity() {

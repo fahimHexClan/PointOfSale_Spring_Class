@@ -13,6 +13,7 @@ import com.Pos.PointOfSale.exception.EntryDuplicateException;
 import com.Pos.PointOfSale.exception.NotFoundException;
 import com.Pos.PointOfSale.repository.CustomerRepo;
 import com.Pos.PointOfSale.util.mappers.CustomerMapper;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
