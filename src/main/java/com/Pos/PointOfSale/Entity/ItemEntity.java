@@ -32,7 +32,7 @@ public class ItemEntity {
     @Column(name = "supplier_price", length = 100, nullable = false)
     private double supplierPrice;
 
-    @Column(name = "supplier_price", length = 100, nullable = false)
+    @Column(name = "selling_price", length = 100, nullable = false)
     private double sellingPrice;
 
     @Column(name = "active_state", columnDefinition = "TINYINT default 1")
