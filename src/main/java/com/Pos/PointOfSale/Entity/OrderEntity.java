@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -18,12 +19,25 @@ public class OrderEntity {
     @Id
     @Column(name = "order_id", length = 45)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int itemId;
+    private int orderId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity customer;//customer entity eken dana mapby ethule thiyana eken thma  meken referance ekata hadanna onaa
     //Baeldung website eken apping gena kiyala thiyanawa
+
     @Column(name = "order_date", columnDefinition = "DATETIME")
     private Date date;
+
+    @Column(name = "total",nullable = false)
+    private double total;
+
+    @OneToMany(mappedBy = "orders")
+    private Set<OrderDetailsEntity> orderDetailsEntities;
+
+    public OrderEntity(CustomerEntity customer, Date date, double total) {
+        this.customer = customer;
+        this.date = date;
+        this.total = total;
+    }
 }

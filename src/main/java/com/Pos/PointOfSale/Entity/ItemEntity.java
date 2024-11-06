@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "item")
 
@@ -27,15 +29,18 @@ public class ItemEntity {
     private MeasuringUnitType measuringUnit;// a enum eke thiyana data tika meyata use wenawa
 
     @Column(name = "balance_qty", length = 100, nullable = false)
-    private double balanceQty;
+    private Double balanceQty;
 
     @Column(name = "supplier_price", length = 100, nullable = false)
-    private double supplierPrice;
+    private Double supplierPrice;
 
     @Column(name = "selling_price", length = 100, nullable = false)
-    private double sellingPrice;
+    private Double sellingPrice;
 
     @Column(name = "active_state", columnDefinition = "TINYINT default 1")
-    private boolean activeState;
+    private Boolean activeState;
+
+    @OneToMany(mappedBy = "items")
+    private Set<OrderDetailsEntity> orderDetails;
 
 }
